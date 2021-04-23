@@ -1,12 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Flight, type: :model do
-  describe 'relationships' do
-    it {should belong_to :airline}
-    it { should have_many(:flights_passengers) }
-    it { should have_many(:passengers).through(:flights_passengers) }
-  end
-
+RSpec.describe 'flights index' do
   before(:each) do
     @airline_1 = Airline.create!(name: 'United')
     @airline_2 = Airline.create!(name: 'Kangroo Airlines')
@@ -26,18 +20,30 @@ RSpec.describe Flight, type: :model do
     @passenger_6 = @flight_3.passengers.create!(name: 'Carl', age: 77)
   end
 
-  describe 'instance methods' do
-    describe '#airline_name' do
-      it 'returns the name of the airline for the flight' do
-        expect(@flight_1.airline_name).to eq(@airline_1.name)
-      end
+  it 'lists all flight numbers, names of the airline for those flights, and a list of all the passengers' do
+    visit "/flights"
+
+    expect(page).to have_content(@flight_1.number)
+    expect(page).to have_content(@flight_2.number)
+    expect(page).to have_content(@flight_3.number)
+
+    within "#flight-#{@flight_1.id}" do
+      expect(page).to have_content(@airline_1.name)
+      expect(page).to have_content(@passenger_1.name)
+      expect(page).to have_content(@passenger_2.name)
+
     end
 
-    describe '#names_of_passengers' do
-      it 'returns the names of all the passengers for a flight' do
-        expect(@flight_1.names_of_passengers).to contain_exactly(@passenger_1.name, @passenger_2.name)
-        expect(@flight_1.names_of_passengers).to_not include(@passenger_3.name)
-      end
+    within "#flight-#{@flight_2.id}" do
+      expect(page).to have_content(@airline_2.name)
+      expect(page).to have_content(@passenger_3.name)
+      expect(page).to have_content(@passenger_4.name)
+    end
+
+    within "#flight-#{@flight_3.id}" do
+      expect(page).to have_content(@airline_3.name)
+      expect(page).to have_content(@passenger_5.name)
+      expect(page).to have_content(@passenger_6.name)
     end
   end
 end
