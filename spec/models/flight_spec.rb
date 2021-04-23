@@ -32,12 +32,5 @@ RSpec.describe Flight, type: :model do
         expect(@flight_1.airline_name).to eq(@airline_1.name)
       end
     end
-
-    describe '#names_of_passengers' do
-      it 'returns the names of all the passengers for a flight' do
-        expect(@flight_1.names_of_passengers).to contain_exactly(@passenger_1.name, @passenger_2.name)
-        expect(@flight_1.names_of_passengers).to_not include(@passenger_3.name)
-      end
-    end
   end
 end

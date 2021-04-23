@@ -6,8 +6,4 @@ class Flight < ApplicationRecord
   def airline_name
     airline.name
   end
-
-  def names_of_passengers
-    passengers.pluck(:name)
-  end
 end
