@@ -1,10 +1,15 @@
 <% @flights.each do |flight| %>
   <div id="flight-<%= flight.id %>">
     <p> <%= flight.number %>
-        <%= flight.airline_name %>
-        <% flight.names_of_passengers.each do |passenger| %>
-        <%= passenger %>
-        <% end %>
+      <%= flight.airline_name %>
     </p>
+      <% flight.passengers.each do |passenger| %>
+        <div id="passenger-<%= passenger.id %>">
+          <p>
+            <%= link_to "remove", flights_passenger_path(flight, passenger: passenger), method: :patch %>
+            <%= passenger.name %>
+          </p>
+        </div>
+      <% end %>
   </div>
 <% end %>
