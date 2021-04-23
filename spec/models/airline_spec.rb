@@ -16,18 +16,21 @@ RSpec.describe Airline, type: :model do
 
     @passenger_1 = @flight_1.passengers.create!(name: 'Mark', age: 5)
     @passenger_2 = @flight_2.passengers.create!(name: 'Kevin', age: 10)
-    @passenger_4 = @flight_2.passengers.create!(name: 'Susan', age: 12)
+    @passenger_4 = @flight_2.passengers.create!(name: 'Susan', age: 35)
     @passenger_3 = @flight_3.passengers.create!(name: 'Jessica', age: 44)
     @passenger_5 = @flight_3.passengers.create!(name: 'Kelly', age: 25)
 
     FlightsPassenger.create!(flight: @flight_1, passenger: @passenger_3)
+    FlightsPassenger.create!(flight: @flight_2, passenger: @passenger_3)
+    FlightsPassenger.create!(flight: @flight_3, passenger: @passenger_4)
+
   end
 
   describe 'instance methods' do
-    describe '#distinct_adult_passengers' do
-      it 'returns the names of all distinct adult passengers with an age >= 18 ' do
-        expect(@airline_1.distinct_adult_passengers).to contain_exactly(@passenger_3, @passenger_5)
-        expect(@airline_1.distinct_adult_passengers).to_not include(@passenger_1, @passenger_2, @passenger_4)
+    describe '#distinct_adult_passengers_ordered_by_flight_attendence_frequency' do
+      it 'returns the names of all distinct adult passengers with an age >= 18 sorted by greatest total flights acrossed the airline ' do
+        expect(@airline_1.distinct_adult_passengers_ordered_by_flight_attendence_frequency).to eq([@passenger_3, @passenger_4, @passenger_5])
+        expect(@airline_1.distinct_adult_passengers_ordered_by_flight_attendence_frequency).to_not include(@passenger_1, @passenger_2)
       end
     end
   end

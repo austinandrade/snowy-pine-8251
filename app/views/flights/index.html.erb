@@ -6,7 +6,7 @@
       <% flight.passengers.each do |passenger| %>
         <div id="passenger-<%= passenger.id %>">
           <p>
-            <%= link_to "remove", flights_passenger_path(flight, passenger: passenger), method: :patch %>
+            <%= link_to "remove", flights_passenger_path(flight, passenger: passenger), method: :delete %>
             <%= passenger.name %>
           </p>
         </div>
