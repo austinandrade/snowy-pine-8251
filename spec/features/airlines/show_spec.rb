@@ -1,12 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Airline, type: :model do
-  describe 'relationships' do
-    it {should have_many :flights}
-    it { should have_many(:flights_passengers).through(:flights) }
-    it { should have_many(:passengers).through(:flights_passengers) }
-  end
-
+RSpec.describe 'airlines show' do
   before(:each) do
     @airline_1 = Airline.create!(name: 'United')
 
@@ -16,19 +10,16 @@ RSpec.describe Airline, type: :model do
 
     @passenger_1 = @flight_1.passengers.create!(name: 'Mark', age: 5)
     @passenger_2 = @flight_2.passengers.create!(name: 'Kevin', age: 10)
-    @passenger_4 = @flight_2.passengers.create!(name: 'Susan', age: 12)
     @passenger_3 = @flight_3.passengers.create!(name: 'Jessica', age: 44)
-    @passenger_5 = @flight_3.passengers.create!(name: 'Kelly', age: 25)
 
     FlightsPassenger.create!(flight: @flight_1, passenger: @passenger_3)
   end
 
-  describe 'instance methods' do
-    describe '#distinct_adult_passengers' do
-      it 'returns the names of all distinct adult passengers with an age >= 18 ' do
-        expect(@airline_1.distinct_adult_passengers).to contain_exactly(@passenger_3, @passenger_5)
-        expect(@airline_1.distinct_adult_passengers).to_not include(@passenger_1, @passenger_2, @passenger_4)
-      end
-    end
+  it 'lists all unique passengers only including adults' do
+    visit "/airlines/#{@airline_1.id}"
+
+    expect(page).to have_content(@passenger_3.name, count: 1)
+    expect(page).to_not have_content(@passenger_1.name)
+    expect(page).to_not have_content(@passenger_2.name)
   end
 end
